@@ -1,53 +1,67 @@
 Here is the complete `README.md` file customized for your project:
 
 ```markdown
-# 🛍️ Full-Stack E-Commerce Application (Shopee Clone)
+# Million Dollar App
 
-A full-stack e-commerce web application built with **React (Vite)**, **Node.js/Express**, and **MySQL**. Features JWT authentication, product catalog browsing, shopping cart management, multi-item checkout, complete order CRUD operations, and real-time profile name updates saved to the database.
+A full-stack e-commerce web application built with React, Express, and MySQL. Users can sign up or log in, browse products, add items to a cart, place orders, and manage their profile and order history.
 
----
+## Overview
 
-## 🚀 Tech Stack
+This project is a simple online store experience inspired by modern marketplace layouts. The app includes both the frontend client and the backend API needed to power authentication, catalog browsing, order creation, and profile updates.
 
-- **Frontend:** React.js (Vite), Axios, Plain CSS (`App.css`)
-- **Backend:** Node.js, Express.js, JSON Web Tokens (`jsonwebtoken`), `bcryptjs`
-- **Database:** MySQL (`mysql2` connection pool)
+## Tech Stack
 
----
+- Frontend: React + Vite
+- Backend: Node.js + Express
+- Auth: JWT + bcryptjs
+- Database: MySQL
+- HTTP client: Axios
+- Dev tooling: concurrently
 
-## 📁 Project Structure
+## Project Structure
 
 ```text
-ecommerce-app/
+million-dollar-app/
 ├── backend/
-│   ├── .env
+│   ├── .env.example
 │   ├── package.json
 │   └── server.js
 ├── frontend/
 │   ├── package.json
-│   ├── src/
-│   │   ├── App.css
-│   │   ├── App.jsx
-│   │   ├── index.css
-│   │   └── main.jsx
-│   └── vite.config.js
+│   ├── public/
+│   └── src/
+├── package.json
+├── package-lock.json
 └── README.md
-
 ```
 
----
+## Features
 
-## ⚙️ Setup & Installation Guide
+- User signup and login
+- JWT-based protected routes
+- Product catalog from MySQL
+- Shopping cart with totals
+- Multi-item checkout flow
+- Order creation, listing, status updates, and deletion
+- User profile updates with refreshed auth token
+- Responsive storefront interface
 
-### 1. Database Setup (MySQL)
+## Prerequisites
 
-Open Command Prompt, Terminal, or MySQL Workbench and execute the following script to build the schema and seed sample products:
+Before running the app, make sure you have:
+
+- Node.js 18+
+- MySQL installed and running
+- A MySQL database created for the project
+
+## Database Setup
+
+Create a database and tables in MySQL:
 
 ```sql
 CREATE DATABASE IF NOT EXISTS ecommerce_db;
 USE ecommerce_db;
 
--- 1. Users Table
 CREATE TABLE IF NOT EXISTS users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -56,7 +70,6 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Products Table
 CREATE TABLE IF NOT EXISTS products (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(150) NOT NULL,
@@ -67,7 +80,6 @@ CREATE TABLE IF NOT EXISTS products (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 3. Checkout Orders Table
 CREATE TABLE IF NOT EXISTS checkout_orders (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -81,7 +93,6 @@ CREATE TABLE IF NOT EXISTS checkout_orders (
   CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- 4. Order Items Table
 CREATE TABLE IF NOT EXISTS order_items (
   id INT AUTO_INCREMENT PRIMARY KEY,
   order_id INT NOT NULL,
@@ -92,99 +103,87 @@ CREATE TABLE IF NOT EXISTS order_items (
   CONSTRAINT fk_items_product FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
--- Seed Sample Products
 INSERT INTO products (name, description, price, image_url, stock) VALUES
-('Wireless Headphones', 'Noise-canceling over-ear headphones', 99.99, '[https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500](https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500)', 15),
-('Smart Watch', 'Fitness tracker with heart rate monitor', 149.99, '[https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500](https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500)', 8),
-('Mechanical Keyboard', 'RGB mechanical gaming keyboard', 79.99, '[https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500](https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500)', 20);
-
+('Wireless Headphones', 'Noise-canceling over-ear headphones', 99.99, 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500', 15),
+('Smart Watch', 'Fitness tracker with heart rate monitor', 149.99, 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500', 8),
+('Mechanical Keyboard', 'RGB mechanical gaming keyboard', 79.99, 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500', 20);
 ```
 
----
+## Environment Configuration
 
-### 2. Backend Setup (Express.js)
+Create a `.env` file in the `backend` folder:
 
-1. Navigate to the `backend` folder:
-```bash
-cd backend
-
-```
-
-
-2. Install required dependencies:
-```bash
-npm install express mysql2 cors bcryptjs jsonwebtoken dotenv
-
-```
-
-
-3. Create a `.env` file inside the `backend` directory:
 ```env
 PORT=5000
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=your_actual_mysql_password
+DB_PASSWORD=your_mysql_password
 DB_NAME=ecommerce_db
-JWT_SECRET=super_secret_jwt_key
-
+JWT_SECRET=your_super_secret_key
 ```
 
+If you are using a local MySQL setup without a password, set `DB_PASSWORD=` to an empty string.
 
-*(Note: Leave `DB_PASSWORD=` empty if using default XAMPP settings)*
-4. Start the backend server:
+## Installation
+
+From the project root, install the root tooling dependencies:
+
 ```bash
-node server.js
-
+npm install
 ```
 
+Then install the app dependencies for each app:
 
-*Output should display: `Server running on http://localhost:5000*`
-
----
-
-### 3. Frontend Setup (React / Vite)
-
-1. Open a new terminal window/tab and navigate to the `frontend` folder:
 ```bash
-cd frontend
-
+cd backend && npm install
+cd ../frontend && npm install
 ```
 
+## Running the App
 
-2. Install Axios:
-```bash
-npm install axios
+From the project root, start both the backend and frontend together:
 
-```
-
-
-3. Ensure `frontend/src/index.css` is cleared/empty.
-4. Paste the project CSS into `frontend/src/App.css` and the React component logic into `frontend/src/App.jsx`.
-5. Start the React development server:
 ```bash
 npm run dev
-
 ```
 
+This uses the root `concurrently` script to launch both services.
 
-*App will be accessible at: `http://localhost:5173/*`
+Alternatively, run them separately:
 
----
-
-## ✨ Features & Functionality
-
-* **🔑 User Authentication:** Login and Sign Up with password hashing (`bcryptjs`) and JWT session persistence stored in `localStorage`.
-* **🛒 Product Storefront:** Browse catalog products fetched from MySQL and dynamically calculate cart totals.
-* **💳 Multi-Item Checkout:** Place orders containing multiple cart items with address validation and payment method selections.
-* **🔄 Complete Order CRUD:**
-* **Create:** Insert new checkout orders and decrease product stock in a SQL transaction.
-* **Read:** Fetch authenticated user order history.
-* **Update:** Dynamically change order status (`Pending`, `Processing`, `Shipped`, `Delivered`).
-* **Delete:** Cancel/delete existing orders from MySQL.
-
-
-* **👤 Account Profile Update:** Edit account name directly in the database with instant token re-issuance.
-
+```bash
+cd backend && npm run dev
 ```
 
+```bash
+cd frontend && npm run dev
 ```
+
+The app will be available at:
+
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:5000
+
+## Default API Behavior
+
+The backend exposes endpoints for:
+
+- `POST /api/auth/signup`
+- `POST /api/auth/login`
+- `PUT /api/auth/profile`
+- `GET /api/products`
+- `POST /api/products`
+- `POST /api/orders`
+- `GET /api/orders`
+- `PUT /api/orders/:id`
+- `DELETE /api/orders/:id`
+
+## Notes
+
+- Authenticated requests use a JWT stored on the client after login/signup.
+- The server validates required fields before creating users or placing orders.
+- MySQL credentials and JWT secrets should be kept out of source control in a local `.env` file.
+
+## License
+
+This project is for educational and personal development use.
